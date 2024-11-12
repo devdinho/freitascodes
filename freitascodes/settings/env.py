@@ -1,7 +1,10 @@
 from freitascodes.settings.base import *
 from dotenv import load_dotenv
 
-load_dotenv()
+DEBUG = True
+
+if DEBUG:
+  load_dotenv()
 
 DB_NAME = os.getenv('DB_NAME')
 DB_USER = os.getenv('DB_USER')
@@ -11,8 +14,6 @@ DB_HOST = os.getenv('DB_HOST')
 ICONS_URL = 'https://skillicons.dev/icons?i='
 
 SECRET_KEY = '^$z(ny5hhd4k119hv)jbop0_rrv$swnkk&9)ja)1j36)pysu)i'
-
-DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0']
 

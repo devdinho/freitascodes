@@ -18,14 +18,22 @@ jobs:
         with:
           project_id: steel-wharf-441413-f8
           service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          
-      - name: Debug JSON Key Content
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | head -n 10
 
       - name: Authenticate with Google Cloud
         run: |
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}" | base64 --decode > /tmp/key.json
           gcloud auth activate-service-account --key-file=/tmp/key.json
-
+          
+      - name: Set environment variables in app.yaml
+        run: |
+          echo "runtime: python311" > app.yaml
+          echo "env_variables:" >> app.yaml
+          echo "  CONTAINER_BACKEND_NAME: ${{ secrets.CONTAINER_BACKEND_NAME }}" >> app.yaml
+          echo "  CONTAINER_DB_NAME: ${{ secrets.CONTAINER_DB_NAME }}" >> app.yaml
+          echo "  DB_NAME: ${{ secrets.DB_NAME }}" >> app.yaml
+          echo "  DB_USER: ${{ secrets.DB_USER }}" >> app.yaml
+          echo "  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> app.yaml
+          echo "  DB_HOST: ${{ secrets.DB_HOST }}" >> app.yaml
+          
       - name: Deploy to Google App Engine
         run: gcloud app deploy
