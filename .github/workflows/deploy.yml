@@ -29,13 +29,13 @@ jobs:
             cd /home/humildadevps/freitascodes
             rm -f .env
             cat <<EOT >> .env
-CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}
-CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}
-DB_NAME=${{ secrets.DB_NAME }}
-DB_USER=${{ secrets.DB_USER }}
-DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-DB_HOST=${{ secrets.DB_HOST }}
-EOT
+            CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}
+            CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            EOT
             docker compose up --build -d
           EOF
 
