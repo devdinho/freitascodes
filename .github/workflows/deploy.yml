@@ -35,16 +35,19 @@ jobs:
             sudo systemctl restart gunicorn
           EOF
       
-      - name: Set environment variables in app.yaml and .env
+      - name: Set environment variables in app.yaml and .env on VM
         run: |
-          echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> .env
-          echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          docker compose up --build -d
-      
+          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
+            echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> /home/humildadevps/freitascodes/.env
+            echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> /home/humildadevps/freitascodes/.env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/humildadevps/freitascodes/.env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> /home/humildadevps/freitascodes/.env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/humildadevps/freitascodes/.env
+            cd /home/humildadevps/freitascodes
+            docker-compose up --build -d
+          EOF
+
       - name: Clean up SSH key and credentials
         run: |
           rm -f /tmp/gcp_ssh_key
