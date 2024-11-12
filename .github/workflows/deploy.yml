@@ -37,6 +37,11 @@ jobs:
           scp -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key .env humildadevps@$GCP_VM_IP:/home/humildadevps/freitascodes/.env
 
       - name: Deploy to Google Cloud VM
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
         run: |
           ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
             cd /home/humildadevps/freitascodes
@@ -46,7 +51,6 @@ jobs:
             python -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt --no-cache
-            sleep 10
             python manage.py migrate freitascodes
             rm -rf /home/humildadevps/freitascodes/freitascodes/static/*
             python manage.py collectstatic --noinput
