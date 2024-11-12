@@ -22,6 +22,7 @@ jobs:
         run: |
           echo "$GCP_SSH_KEY" > /tmp/gcp_ssh_key
           chmod 600 /tmp/gcp_ssh_key
+          rm /home/humildadevps/freitascodes/.env
 
       - name: Set environment variables in app.yaml and .env on VM
         run: |
@@ -33,7 +34,7 @@ jobs:
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/humildadevps/freitascodes/.env
             cd /home/humildadevps/freitascodes
-            docker-compose up --build -d
+            docker compose up --build -d
           EOF
       - name: Deploy to Google Cloud VM
         env:
