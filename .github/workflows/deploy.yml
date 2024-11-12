@@ -38,6 +38,7 @@ jobs:
       - name: Set environment variables in app.yaml and .env on VM
         run: |
           ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
+            rm /home/humildadevps/freitascodes/.env
             echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> /home/humildadevps/freitascodes/.env
             echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/humildadevps/freitascodes/.env
