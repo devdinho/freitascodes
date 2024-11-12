@@ -22,7 +22,8 @@ jobs:
         run: |
           echo "$GCP_SSH_KEY" > /tmp/gcp_ssh_key
           chmod 600 /tmp/gcp_ssh_key
-          rm /home/humildadevps/freitascodes/.env
+          cd /home/humildadevps/freitascodes
+          rm .env
 
       - name: Set environment variables in app.yaml and .env on VM
         run: |
