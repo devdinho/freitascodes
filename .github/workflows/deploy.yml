@@ -33,13 +33,13 @@ jobs:
           echo "  DB_NAME: ${{ secrets.DB_NAME }}" >> app.yaml
           echo "  DB_USER: ${{ secrets.DB_USER }}" >> app.yaml
           echo "  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> app.yaml
-          echo "  DB_HOST: ${{ secrets.DB_HOST }}" >> app.yaml
+          echo "  DB_HOST: localhost" >> app.yaml
           echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> .env
           echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_HOST=localhost" >> .env
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -57,7 +57,7 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_HOST: localhost
         run: |
           source venv/bin/activate
           python manage.py migrate
@@ -67,7 +67,7 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_HOST: localhost
         run: |
           source venv/bin/activate
           python manage.py collectstatic --noinput
