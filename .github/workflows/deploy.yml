@@ -45,7 +45,7 @@ jobs:
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/humildadevps/freitascodes/.env
             cd /home/humildadevps/freitascodes
-            docker-compose up --build -d
+            docker compose up --build -d
           EOF
 
       - name: Clean up SSH key and credentials
