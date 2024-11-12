@@ -20,7 +20,7 @@ case $1 in
     *)
         echo "Iniciando Web Chat"
         
-        export DJANGO_SETTINGS_MODULE=freitascodes.settings
+        export DJANGO_SETTINGS_MODULE=freitascodes.settings.env
 
         cleanBuild
         

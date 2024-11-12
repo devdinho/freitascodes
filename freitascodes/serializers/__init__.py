@@ -1,0 +1,3 @@
+from freitascodes.serializers.StacksSerializer import StacksSerializer
+from freitascodes.serializers.ProjetosSerializer import ProjetosSerializer
+from freitascodes.serializers.CertificadosSerializer import CertificadosSerializer

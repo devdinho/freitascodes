@@ -1,0 +1,2 @@
+from freitascodes.views.CertificadosApiView import CertificadosApiView
+from freitascodes.views.ProjetosApiView import ProjetosApiView
