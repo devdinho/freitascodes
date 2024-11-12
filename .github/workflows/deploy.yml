@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   deploy:
@@ -17,18 +14,20 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Google Cloud credentials
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        run: |
+          # Decodifica a chave de autenticação em base64 e salva como um arquivo JSON
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/gcp_key.json
+          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcp_key.json"
 
       - name: Configure SSH key
         run: |
-          echo "$GCP_SSH_KEY" > /tmp/gcp_key
-          chmod 600 /tmp/gcp_key
+          echo "$GCP_SSH_KEY" > /tmp/gcp_ssh_key
+          chmod 600 /tmp/gcp_ssh_key
 
       - name: Deploy to Google Cloud VM
         run: |
-          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_key humildadevps@$GCP_VM_IP << 'EOF'
+          # Conecta à VM e executa os comandos
+          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
             cd /home/humildadevps/freitascodes
             git pull origin main
             source venv/bin/activate
@@ -36,11 +35,13 @@ jobs:
             python manage.py collectstatic --noinput
           EOF
 
-      - name: Clean up SSH key
+      - name: Clean up SSH key and credentials
         run: |
-          rm -f /tmp/gcp_key
+          rm -f /tmp/gcp_ssh_key
+          rm -f /tmp/gcp_key.json
         if: always()
 
     env:
       GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
       GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
+      GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
