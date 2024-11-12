@@ -1,0 +1,27 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: steel-wharf-441413-f8
+          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Authenticate with Google Cloud
+        run: gcloud auth activate-service-account --key-file=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Deploy to Google App Engine
+        run: |
+          gcloud app deploy 
