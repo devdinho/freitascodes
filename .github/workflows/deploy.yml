@@ -18,9 +18,14 @@ jobs:
         with:
           project_id: steel-wharf-441413-f8
           service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          
+      - name: Debug JSON Key Content
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | head -n 10
 
       - name: Authenticate with Google Cloud
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | gcloud auth activate-service-account --key-file=-
-        
+        run: |
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > /tmp/key.json
+          gcloud auth activate-service-account --key-file=/tmp/key.json
+
       - name: Deploy to Google App Engine
         run: gcloud app deploy
