@@ -34,6 +34,37 @@ jobs:
           echo "  DB_USER: ${{ secrets.DB_USER }}" >> app.yaml
           echo "  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> app.yaml
           echo "  DB_HOST: ${{ secrets.DB_HOST }}" >> app.yaml
-          
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies in virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run Django migrations
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+        run: |
+          source venv/bin/activate
+          python manage.py migrate
+
+      - name: Collect static files
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+        run: |
+          source venv/bin/activate
+          python manage.py collectstatic --noinput
+
       - name: Deploy to Google App Engine
         run: gcloud app deploy
