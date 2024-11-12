@@ -84,13 +84,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-MEDIA_URL = '/freitascodes/media/'
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATIC_URL = '/freitascodes/static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "../static-global"),
