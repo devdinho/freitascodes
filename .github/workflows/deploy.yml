@@ -1,42 +1,36 @@
-name: Deploy to Google Cloud VM
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Execute commands on Google Cloud VM
-      env:
-        GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
-        GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
-      run: |
-        # Configura a chave SSH temporariamente
-        echo "$GCP_SSH_KEY" > /tmp/gcp_key
-        chmod 600 /tmp/gcp_key
+      - name: Set up Google Cloud credentials
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-        # Conecta na VM e executa os comandos de atualização e configuração
-        ssh -o StrictHostKeyChecking=no -i /tmp/gcp_key humildadevps@$GCP_VM_IP << 'EOF'
-          # Navega até o diretório do projeto
-          cd /home/humildadevps/freitascodes
+      - name: Configure SSH key
+        run: |
+          echo "$GCP_SSH_KEY" > /tmp/gcp_key
+          chmod 600 /tmp/gcp_key
 
-          # Faz o pull do código mais recente
-          git pull origin main
+      - name: Deploy to Google Cloud VM
+        run: |
+          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_key humildadevps@$GCP_VM_IP << 'EOF'
+            cd /home/humildadevps/freitascodes
+            git pull origin main
+            source venv/bin/activate
+            python manage.py migrate
+            python manage.py collectstatic --noinput
+          EOF
 
-          # Executa migrações do Django
-          source venv/bin/activate
-          python manage.py migrate
+      - name: Clean up SSH key
+        run: |
+          rm -f /tmp/gcp_key
+        if: always()
 
-          # Executa o collectstatic
-          python manage.py collectstatic --noinput
-        EOF
-
-        # Remove a chave SSH temporária após uso
-        rm -f /tmp/gcp_key
+    env:
+      GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
+      GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
