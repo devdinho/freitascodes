@@ -23,21 +23,22 @@ jobs:
           echo "$GCP_SSH_KEY" > /tmp/gcp_ssh_key
           chmod 600 /tmp/gcp_ssh_key
 
-      - name: Set environment variables in app.yaml and .env on VM
+      - name: Set environment variables in .env on VM and run Docker
         run: |
           ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
             cd /home/humildadevps/freitascodes
-            rm .env
-            sleep 5
-            echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> /home/humildadevps/freitascodes/.env
-            echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> /home/humildadevps/freitascodes/.env
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/humildadevps/freitascodes/.env
-            echo "DB_USER=${{ secrets.DB_USER }}" >> /home/humildadevps/freitascodes/.env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/humildadevps/freitascodes/.env
-            sleep 5
+            rm -f .env
+            cat <<EOT >> .env
+CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}
+CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}
+DB_NAME=${{ secrets.DB_NAME }}
+DB_USER=${{ secrets.DB_USER }}
+DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+DB_HOST=${{ secrets.DB_HOST }}
+EOT
             docker compose up --build -d
           EOF
+
       - name: Deploy to Google Cloud VM
         env:
           DB_NAME: ${{ secrets.DB_NAME }}
@@ -49,12 +50,12 @@ jobs:
             cd /home/humildadevps/freitascodes
             git checkout .
             git pull origin main -f
-            rm -rf /home/humildadevps/freitascodes/venv/
+            rm -rf venv/
             python -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt --no-cache
             python manage.py migrate freitascodes
-            rm -rf /home/humildadevps/freitascodes/freitascodes/static/*
+            rm -rf freitascodes/static/*
             python manage.py collectstatic --noinput
             sudo systemctl restart gunicorn
           EOF
