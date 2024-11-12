@@ -6,7 +6,7 @@ class Certificados(models.Model):
   descricao = models.TextField('Descrição do Curso/Certificado')
 
   avaliable_at = models.CharField('Disponível em', help_text='Link do Projeto em produção ou biblioteca no PYPI por exemplo.', max_length=2000)
-
+  arquivo = models.FileField('Arquivo', upload_to="certificados", null=True, blank=True)
   stacks = models.ManyToManyField(Stacks, verbose_name='Stacks', help_text='Stacks associadas')
   
   ativo = models.BooleanField(verbose_name='Está Disponível?', default=True)
