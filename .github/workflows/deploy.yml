@@ -31,8 +31,19 @@ jobs:
             source venv/bin/activate
             python manage.py migrate
             python manage.py collectstatic --noinput
+            sudo systemctl restart gunicorn
           EOF
-
+      
+      - name: Set environment variables in app.yaml and .env
+        run: |
+          echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> .env
+          echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          docker compose up --build -d
+      
       - name: Clean up SSH key and credentials
         run: |
           rm -f /tmp/gcp_ssh_key
