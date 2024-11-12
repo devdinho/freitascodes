@@ -45,6 +45,7 @@ jobs:
             python -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt --no-cache
+            sleep 10
             python manage.py migrate freitascodes
             rm -rf /home/humildadevps/freitascodes/freitascodes/static/*
             python manage.py collectstatic --noinput
