@@ -32,8 +32,6 @@ jobs:
             echo "DB_USER=${{ secrets.DB_USER }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/humildadevps/freitascodes/.env
-            cd /home/humildadevps/freitascodes
-            docker compose up --build -d
           EOF
       - name: Deploy to Google Cloud VM
         run: |
