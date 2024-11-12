@@ -30,7 +30,8 @@ jobs:
             git checkout .
             git pull origin main -f
             source venv/bin/activate
-            python manage.py migrate
+            python manage.py migrate freitascodes
+	          rm -rf static/*
             python manage.py collectstatic --noinput
             sudo systemctl restart gunicorn
           EOF
