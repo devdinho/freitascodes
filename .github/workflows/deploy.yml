@@ -1,4 +1,4 @@
-name: Deploy to Google Cloud
+name: Deploy to Google Cloud VM
 
 on:
   push:
@@ -10,57 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: steel-wharf-441413-f8
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    - name: Execute commands on Google Cloud VM
+      env:
+        GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
+        GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
+      run: |
+        # Configura a chave SSH temporariamente
+        echo "$GCP_SSH_KEY" > /tmp/gcp_key
+        chmod 600 /tmp/gcp_key
 
-      - name: Authenticate with Google Cloud
-        run: |
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}" | base64 --decode > /tmp/key.json
-          gcloud auth activate-service-account --key-file=/tmp/key.json
+        # Conecta na VM e executa os comandos de atualização e configuração
+        ssh -o StrictHostKeyChecking=no -i /tmp/gcp_key your_vm_user@$GCP_VM_IP << 'EOF'
+          # Navega até o diretório do projeto
+          cd /caminho/do/seu/projeto
 
-      - name: Set environment variables in app.yaml and .env
-        run: |
-          echo "runtime: python311" > app.yaml
-          echo "env_variables:" >> app.yaml
-          echo "  CONTAINER_BACKEND_NAME: ${{ secrets.CONTAINER_BACKEND_NAME }}" >> app.yaml
-          echo "  CONTAINER_DB_NAME: ${{ secrets.CONTAINER_DB_NAME }}" >> app.yaml
-          echo "  DB_NAME: ${{ secrets.DB_NAME }}" >> app.yaml
-          echo "  DB_USER: ${{ secrets.DB_USER }}" >> app.yaml
-          echo "  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> app.yaml
-          echo "  DB_HOST: 127.0.0.1" >> app.yaml
-          echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> .env
-          echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
+          # Faz o pull do código mais recente
+          git pull origin main
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies in virtual environment
-        run: |
-          python -m venv venv
+          # Executa migrações do Django
           source venv/bin/activate
-          pip install -r requirements.txt
-          
-      - name: Collect static files
-        env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: 127.0.0.1
-        run: |
-          source venv/bin/activate
+          python manage.py migrate
+
+          # Executa o collectstatic
           python manage.py collectstatic --noinput
+        EOF
 
-      - name: Deploy to Google App Engine
-        run: gcloud app deploy
+      cleanup: |
+        rm -f /tmp/gcp_key
