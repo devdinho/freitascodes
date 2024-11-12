@@ -23,9 +23,9 @@ jobs:
         chmod 600 /tmp/gcp_key
 
         # Conecta na VM e executa os comandos de atualização e configuração
-        ssh -o StrictHostKeyChecking=no -i /tmp/gcp_key your_vm_user@$GCP_VM_IP << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i /tmp/gcp_key humildadevps@$GCP_VM_IP << 'EOF'
           # Navega até o diretório do projeto
-          cd /caminho/do/seu/projeto
+          cd /home/humildadevps/freitascodes
 
           # Faz o pull do código mais recente
           git pull origin main
@@ -38,5 +38,5 @@ jobs:
           python manage.py collectstatic --noinput
         EOF
 
-      cleanup: |
+        # Remove a chave SSH temporária após uso
         rm -f /tmp/gcp_key
