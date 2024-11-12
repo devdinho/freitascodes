@@ -24,6 +24,9 @@ jobs:
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}" | base64 --decode > /tmp/key.json
           gcloud auth activate-service-account --key-file=/tmp/key.json
           
+      - name: Criar aplicação App Engine
+        run: gcloud app create --region=us-central
+
       - name: Set environment variables in app.yaml
         run: |
           echo "runtime: python311" > app.yaml
