@@ -15,7 +15,7 @@ ICONS_URL = 'https://skillicons.dev/icons?i='
 
 SECRET_KEY = '^$z(ny5hhd4k119hv)jbop0_rrv$swnkk&9)ja)1j36)pysu)i'
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0','portifolio.freitascodes.me']
 
 DATABASES = {
   'default': {
