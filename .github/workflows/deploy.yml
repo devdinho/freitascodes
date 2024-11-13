@@ -51,8 +51,9 @@ jobs:
             rm -rf venv/
             python -m venv venv
             source venv/bin/activate
+            sleep 10
+            docker ps
             pip install -r requirements.txt --no-cache
-            sleep 5
             python manage.py migrate freitascodes
             rm -rf freitascodes/static/*
             python manage.py collectstatic --noinput
