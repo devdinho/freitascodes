@@ -25,10 +25,10 @@ jobs:
 
       - name: Set environment variables in .env on VM and run Docker
         run: |
-          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << EOF
             cd /home/humildadevps/freitascodes
             rm -f .env
-            cat <<EOT >> .env
+            cat <<EOT > .env
             CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}
             CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}
             DB_NAME=${{ secrets.DB_NAME }}
@@ -46,7 +46,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: ${{ secrets.DB_HOST }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << EOF
             cd /home/humildadevps/freitascodes
             git checkout .
             git pull origin main -f
