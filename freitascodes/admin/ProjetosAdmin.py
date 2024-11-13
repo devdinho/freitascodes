@@ -4,7 +4,7 @@ from freitascodes.models import Projetos, Imagens
 
 class ImagensInline(admin.StackedInline):
   model = Imagens
-  extra = 1
+  extra = 0
 
 @admin.register(Projetos)
 class ProjetosAdmin(admin.ModelAdmin):

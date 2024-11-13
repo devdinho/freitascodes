@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from freitascodes.models import Stacks
 
-
+# from freitascodes.serializers import TipoStacksSerializer
 class StacksSerializer(serializers.ModelSerializer):
-  stack_type_display = serializers.CharField(source='get_stack_type_display')
+  
   
   class Meta:
     model = Stacks
