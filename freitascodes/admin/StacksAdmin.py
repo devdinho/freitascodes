@@ -6,3 +6,4 @@ from freitascodes.models import Stacks
 class StacksAdmin(admin.ModelAdmin):
   list_display = ['name','stack_type','skillicon_name']
   search_fields = ['name','stack_type','skillicon_name']
+  autocomplete_fields = ['stack_type']

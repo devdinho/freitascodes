@@ -1,14 +1,9 @@
 from django.db import models
-
-STACK_TYPE_CHOICES = (
-  (1,'Linguagem de Programação'),  
-  (2,'Framework'),  
-  (3,'Biblioteca'),  
-)
+from freitascodes.models import TipoStacks
 
 class Stacks(models.Model):
   name = models.CharField('Nome da Tecnologia', max_length=255)
-  stack_type = models.IntegerField('Tipo de Stack', choices=STACK_TYPE_CHOICES, default=1)
+  stack_type = models.ForeignKey(TipoStacks, verbose_name='Tipo de Stack', default=1, on_delete=models.PROTECT)
   skillicon_name = models.CharField('Name do Skill Icon', help_text='Disponível em https://github.com/tandpfun/skill-icons?tab=readme-ov-file#icons-list')
 
   class Meta:
