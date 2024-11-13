@@ -54,7 +54,6 @@ jobs:
             sleep 10
             docker ps
             pip install -r requirements.txt --no-cache
-            python manage.py migrate freitascodes
             rm -rf freitascodes/static/*
             python manage.py collectstatic --noinput
             sudo systemctl restart gunicorn
