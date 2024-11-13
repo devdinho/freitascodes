@@ -7,4 +7,4 @@ class StacksSerializer(serializers.ModelSerializer):
   
   class Meta:
     model = Stacks
-    fields = ['name','stack_type','stack_type_display','skillicon_name']
+    fields = ['name','stack_type','stack_type','skillicon_name']
