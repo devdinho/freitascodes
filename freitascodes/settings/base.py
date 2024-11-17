@@ -7,14 +7,16 @@ DEFAULT_APPS = [
     'materialdash',
     'materialdash.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.contenttypes',
+
 ]
 
 LOCAL_APPS = [
-    'freitascodes'
+    'freitascodes',
 ]
 
 OTHER_APPS = [

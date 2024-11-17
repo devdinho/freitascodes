@@ -24,5 +24,5 @@ class ProjetosSerializer(serializers.ModelSerializer):
     return icons_urls
   
   def get_imagens(self, obj):
-    imgs = obj.imagens_set.all()
-    return ImagensSerializer(imgs, many=True).data[0] if imgs else None
+    imgs = ImagensSerializer(obj.imagens_set.filter(ativo=True).order_by('-ordem'), many=True)
+    return imgs.data if imgs else None
