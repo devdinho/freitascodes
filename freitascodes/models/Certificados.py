@@ -2,12 +2,12 @@ from django.db import models
 from freitascodes.models import Stacks
 
 class Certificados(models.Model):
-  nome = models.CharField('Name do Repositório', help_text='Link do Github', max_length=500)
+  nome = models.CharField('Nome do Certificado', max_length=500)
   descricao = models.TextField('Descrição do Curso/Certificado')
 
-  avaliable_at = models.CharField('Disponível em', help_text='Link do Projeto em produção ou biblioteca no PYPI por exemplo.', max_length=2000)
+  avaliable_at = models.CharField('Disponível em', help_text='Link do Certificado Online.', max_length=2000, null=True, blank=True)
   arquivo = models.FileField('Arquivo', upload_to="certificados", null=True, blank=True)
-  stacks = models.ManyToManyField(Stacks, verbose_name='Stacks', help_text='Stacks associadas')
+  stacks = models.ManyToManyField(Stacks, verbose_name='Stacks', help_text='Stacks associadas ao certificado.')
   
   ativo = models.BooleanField(verbose_name='Está Disponível?', default=True)
 
