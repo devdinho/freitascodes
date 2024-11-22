@@ -7,10 +7,8 @@ from freitascodes.serializers import ProjetosSerializer
 class ProjetosApiView(viewsets.ModelViewSet):
   serializer_class = ProjetosSerializer
 
-  def list(self, request):
-    data = Projetos.objects.filter(ativo=True)
-    messages = ProjetosSerializer(data, many=True).data[0] if data else None
-    return Response(messages)
+  def get_queryset(self):
+    return Projetos.objects.filter(ativo=True)
     
   def retrieve(self, request, *args, **kwargs):
     project_type = kwargs.get('pk')
