@@ -10,6 +10,6 @@ class Stacks(models.Model):
     verbose_name = 'Stack'
     verbose_name_plural = 'Stacks'
     ordering = ['stack_type','name']
-  
+    
   def __str__(self):
     return f'{self.name} ({self.skillicon_name}) - {self.stack_type}'

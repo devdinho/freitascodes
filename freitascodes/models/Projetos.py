@@ -10,7 +10,7 @@ class Projetos(models.Model):
   name = models.CharField('Nome do Projeto', max_length=255)
   project_type = models.IntegerField('Tipo de Projeto', choices=PROJECT_TYPE_CHOICES, default=1)
   repo_name = models.CharField('Name do Repositório', help_text='Link do Github', max_length=500)
-  avaliable_at = models.CharField('Disponível em', help_text='Link do Projeto em produção ou biblioteca no PYPI por exemplo.', max_length=500)
+  avaliable_at = models.CharField('Disponível em', help_text='Link do Projeto em produção ou biblioteca no PYPI por exemplo.', max_length=500, blank=True, null=True)
 
   stacks = models.ManyToManyField(Stacks, verbose_name='Stacks', help_text='Stacks utilizadas ou disponível para estas stacks')
   
