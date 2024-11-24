@@ -9,13 +9,6 @@ class ProjetosApiView(viewsets.ModelViewSet):
 
   def get_queryset(self):
     return Projetos.objects.filter(project_type=self.request.GET.get('type',1), ativo=True)
-    
-  def retrieve(self, request, *args, **kwargs):
-    project_type = kwargs.get('pk')
-    data = Projetos.objects.filter(project_type=project_type)
-    messages = ProjetosSerializer(data, many=True).data[0] if data else None
-
-    return Response(messages)
   
   def create(self, request, *args, **kwargs):
     responseData = {'mensagem':'Não permitido!'}

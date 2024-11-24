@@ -13,7 +13,7 @@ class ProjetosSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Projetos
-    fields = ['name','project_type','project_type_display','repo_name','avaliable_at','stacks','imagens']
+    fields = ['id','name','project_type','project_type_display','repo_name','avaliable_at','stacks','imagens']
   
   def get_imagens(self, obj):
     imgs = ImagensSerializer(obj.imagens_set.filter(ativo=True).order_by('-ordem'), many=True)
