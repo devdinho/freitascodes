@@ -2,15 +2,19 @@ from freitascodes.settings.base import *
 from dotenv import load_dotenv
 import os
 
-DEBUG = True
-
-load_dotenv()
 SITE_ID = 1
 
+load_dotenv()
+
+
+DEBUG = eval(os.getenv('DEBUG'))
 DB_NAME = os.getenv('DB_NAME')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
+
+
+print(f"Debug: {DEBUG}")
 
 SECRET_KEY = '^$z(ny5hhd4k119hv)jbop0_rrv$swnkk&9)ja)1j36)pysu)i'
 

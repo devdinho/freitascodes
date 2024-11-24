@@ -32,6 +32,7 @@ jobs:
             rm /home/humildadevps/freitascodes/.env
             echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> /home/humildadevps/freitascodes/.env
             echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> /home/humildadevps/freitascodes/.env
+            echo "DEBUG=${{ secrets.DEBUG }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_USER=${{ secrets.DB_USER }}" >> /home/humildadevps/freitascodes/.env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
