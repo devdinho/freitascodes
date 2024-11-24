@@ -12,8 +12,6 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 
-ICONS_URL = 'https://skillicons.dev/icons?i='
-
 SECRET_KEY = '^$z(ny5hhd4k119hv)jbop0_rrv$swnkk&9)ja)1j36)pysu)i'
 
 ALLOWED_HOSTS = ['0.0.0.0','34.133.103.79','portifolio.freitascodes.me']
