@@ -1,4 +1,15 @@
 services:
+  djangoapp:
+    container_name: ${CONTAINER_BACKEND_NAME}
+    build:
+      context: .
+    ports:
+      - 1404:1404
+    volumes:
+      - .:/app
+    restart: always
+    depends_on:
+      - db
   db:
     env_file: '.env'
     container_name: ${CONTAINER_DB_NAME}
