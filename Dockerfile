@@ -1,21 +1,17 @@
 FROM python:3.12.6-slim
 
-ENV PIPENV_VENV_IN_PROJECT 1
+RUN useradd -ms /bin/bash devdinho
 
-RUN pip install pipenv
-
-RUN useradd -ms /bin/bash my-user
-
-USER my-user
+USER devdinho
 
 WORKDIR /app
 
-RUN chown -R my-user /app
+RUN chown -R devdinho /app
 
-COPY --chown=my-user:my-user . /app
+COPY --chown=devdinho:devdinho . /app
 
 RUN chmod +x /app/start.sh
 
-RUN pipenv install
+RUN pip install -r requirements.txt --no-cache-dir
 
 CMD sh -c /app/start.sh

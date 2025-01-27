@@ -4,21 +4,20 @@ import os
 
 SITE_ID = 1
 
-load_dotenv()
+load_dotenv(override=True)
 
+DEBUG = os.getenv('DEBUG')
 
-DEBUG = eval(os.getenv('DEBUG'))
+print(f"Debug: {DEBUG}")
+
 DB_NAME = os.getenv('DB_NAME')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-print(f"Debug: {DEBUG}")
-
-SECRET_KEY = '^$z(ny5hhd4k119hv)jbop0_rrv$swnkk&9)ja)1j36)pysu)i'
-
-ALLOWED_HOSTS = ['0.0.0.0','34.133.103.79','portifolio.freitascodes.me']
+ALLOWED_HOSTS = ['0.0.0.0',os.getenv('VM_IP'),'portifolio.freitascodes.me']
 
 DATABASES = {
   'default': {
