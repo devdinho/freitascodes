@@ -7,6 +7,7 @@ services:
       - 1404:1404
     volumes:
       - .:/app
+      - static_data:/app/freitascodes/static
     restart: always
     depends_on:
       - db
@@ -26,6 +27,18 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - freitascodesnetwork
+  nginx:
+    image: nginx:latest
+    container_name: ${CONTAINER_NGINX_NAME}
+    volumes:
+      - static_data:/usr/share/nginx/html/static
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - djangoapp
     networks:
       - freitascodesnetwork
 volumes:
