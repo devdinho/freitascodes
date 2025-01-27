@@ -31,7 +31,7 @@ services:
       - freitascodesnetwork
 volumes:
   postgres_data:
-  static_data:
+  static:
   
 networks:
   freitascodesnetwork:
