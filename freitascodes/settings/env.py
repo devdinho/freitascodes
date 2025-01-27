@@ -17,7 +17,7 @@ DB_HOST = os.getenv('DB_HOST')
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-ALLOWED_HOSTS = ['0.0.0.0',os.getenv('VM_IP'),'portifolio.freitascodes.me']
+ALLOWED_HOSTS = ['0.0.0.0',os.getenv('VM_IP'),'portifolio.dinho.dev']
 
 DATABASES = {
   'default': {
