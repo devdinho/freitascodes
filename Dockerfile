@@ -1,17 +1,16 @@
-FROM python:3.12.6-slim
-
-RUN useradd -ms /bin/bash devdinho
-
-USER devdinho
+FROM python:3.12.6-alpine
 
 WORKDIR /app
 
-RUN chown -R devdinho /app
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY --chown=devdinho:devdinho . /app
-
-RUN chmod +x /app/start.sh
+COPY requirements.txt /app/requirements.txt
 
 RUN pip install -r requirements.txt --no-cache-dir
+
+COPY . /app
+
+EXPOSE 1404
 
 CMD sh -c /app/start.sh
