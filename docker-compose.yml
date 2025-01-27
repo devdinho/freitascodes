@@ -7,7 +7,7 @@ services:
       - 1404:1404
     volumes:
       - .:/app
-      - static:/app/freitascodes/static
+      - ./freitascodes/static:/app/freitascodes/static
     restart: always
     depends_on:
       - db
@@ -31,7 +31,6 @@ services:
       - freitascodesnetwork
 volumes:
   postgres_data:
-  static:
   
 networks:
   freitascodesnetwork:
