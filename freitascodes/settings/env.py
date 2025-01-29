@@ -10,9 +10,9 @@ DEBUG = os.getenv('DEBUG')
 
 print(f"Debug: {DEBUG}")
 
-DB_NAME = os.getenv('DB_NAME')
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
+POSTGRES_DB = os.getenv('POSTGRES_DB')
+POSTGRES_USER = os.getenv('POSTGRES_USER')
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -22,9 +22,9 @@ ALLOWED_HOSTS = ['0.0.0.0',os.getenv('VM_IP'),'portifolio.dinho.dev']
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql',
-    'NAME': DB_NAME,
-    'USER': DB_USER,
-    'PASSWORD': DB_PASSWORD,
+    'NAME': POSTGRES_DB,
+    'USER': POSTGRES_USER,
+    'PASSWORD': POSTGRES_PASSWORD,
     'HOST': DB_HOST,
     'PORT': '5432',
   }

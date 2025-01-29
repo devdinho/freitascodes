@@ -7,31 +7,23 @@ services:
       - 1404:1404
     volumes:
       - .:/app
-      - ./freitascodes/static:/app/freitascodes/static
     restart: always
     depends_on:
       - db
-    links:
-      - db:db
-    networks:
-      - freitascodesnetwork
+    env_file: '.env'
+
   db:
     env_file: '.env'
     container_name: ${CONTAINER_DB_NAME}
-    image: postgres:latest
+    image: postgres:17
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    networks:
-      - freitascodesnetwork
+
 volumes:
   postgres_data:
-  
-networks:
-  freitascodesnetwork:
-    driver: bridge
