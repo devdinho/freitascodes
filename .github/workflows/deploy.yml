@@ -24,9 +24,7 @@ jobs:
           VM_PASSKEY: ${{ secrets.VM_PASSKEY }}
         run: |
           sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
-            cd Projetos/freitascodes
-
-            pwd
+            cd $VM_PWD
 
             git checkout .
             git pull origin main -f
@@ -45,4 +43,6 @@ jobs:
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $VM_PWD/.env
 
             docker compose up --build -d
+
+            sudo systemctl restart nginx
           EOF
