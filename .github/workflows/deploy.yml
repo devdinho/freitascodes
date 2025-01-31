@@ -21,10 +21,13 @@ jobs:
           sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
             cd $VM_PWD
 
+            pwd
+            
             git checkout .
             git pull origin main -f
 
             rm $VM_PWD/.env
+            echo "$VM_PWD/.env file removed"
 
             echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> $VM_PWD/.env
             echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> $VM_PWD/.env
