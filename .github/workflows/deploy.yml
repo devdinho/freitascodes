@@ -40,7 +40,7 @@ jobs:
           EOF
 
     env:
-        VM_IP: ${{ secrets.VM_IP }}
-        VM_PWD: ${{ secrets.VM_PWD }}
-        VM_USER: ${{ secrets.VM_USER }}
-        VM_PASSKEY: ${{ secrets.VM_PASSKEY }}
+      VM_IP: ${{ secrets.VM_IP }}
+      VM_PWD: ${{ secrets.VM_PWD }}
+      VM_USER: ${{ secrets.VM_USER }}
+      VM_PASSKEY: ${{ secrets.VM_PASSKEY }}
