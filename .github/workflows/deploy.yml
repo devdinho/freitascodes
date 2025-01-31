@@ -13,13 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install sshpass
+        run: sudo apt-get install sshpass
+
       - name: Set environment variables in app.yaml and .env on VM
         run: |
           sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
             cd $VM_PWD
 
-            pwd
-            
             git checkout .
             git pull origin main -f
 
