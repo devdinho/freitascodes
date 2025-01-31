@@ -24,7 +24,7 @@ jobs:
           VM_PASSKEY: ${{ secrets.VM_PASSKEY }}
         run: |
           sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
-            cd $VM_USER/Projetos/freitascodes
+            cd Projetos/freitascodes
 
             pwd
 
