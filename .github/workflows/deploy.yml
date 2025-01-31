@@ -13,36 +13,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install sshpass
-        run: sudo apt-get install sshpass
-
-      - name: Set environment variables in app.yaml and .env on VM
-        env:
-          VM_IP: ${{ secrets.VM_IP }}
-          VM_PWD: ${{ secrets.VM_PWD }}
-          VM_USER: ${{ secrets.VM_USER }}
-          VM_PASSKEY: ${{ secrets.VM_PASSKEY }}
-        run: |
-          sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
-            cd ~/Projetos/freitascodes
+      - name: Deploy application via SSH
+        uses: appleboy/ssh-action@v0.1.11
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: ${{ secrets.VM_USER }}
+          password: ${{ secrets.VM_PASSKEY }}
+          port: 22
+          script: |
+            cd ${{ secrets.VM_PWD }}
 
             git checkout .
             git pull origin main -f
 
-            rm $VM_PWD/.env
-            echo "$VM_PWD/.env file removed"
-
-            echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> $VM_PWD/.env
-            echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> $VM_PWD/.env
-            echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $VM_PWD/.env
-            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $VM_PWD/.env
-            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $VM_PWD/.env
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> $VM_PWD/.env
-            echo "DEBUG=${{ secrets.DEBUG }}" >> $VM_PWD/.env
-            echo "VM_IP=${{ secrets.VM_IP }}" >> $VM_PWD/.env
-            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $VM_PWD/.env
+            rm -f .env
+            echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> .env
+            echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> .env
+            echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+            echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+            echo "VM_IP=${{ secrets.VM_IP }}" >> .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
             docker compose up --build -d
 
             sudo systemctl restart nginx
-          EOF
