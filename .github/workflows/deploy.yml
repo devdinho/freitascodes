@@ -18,6 +18,8 @@ jobs:
           sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
             cd $VM_PWD
 
+            pwd
+            
             git checkout .
             git pull origin main -f
 
