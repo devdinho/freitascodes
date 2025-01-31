@@ -1,72 +1,43 @@
-# name: Deploy to Google Cloud VM
+name: Deploy to Production
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Set up Google Cloud credentials
-#         run: |
-#           echo "$GOOGLE_APPLICATION_CREDENTIALS_BASE64" | base64 --decode > /tmp/gcp_key.json
-#           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcp_key.json"
+      - name: Set environment variables in app.yaml and .env on VM
+        run: |
+          sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
+            cd $VM_PWD
 
-#       - name: Configure SSH key
-#         run: |
-#           echo "$GCP_SSH_KEY" > /tmp/gcp_ssh_key
-#           chmod 600 /tmp/gcp_ssh_key
+            git checkout .
+            git pull origin main -f
 
-#       - name: Set environment variables in app.yaml and .env on VM
-#         run: |
-#           ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << 'EOF'
-#             cd /home/humildadevps/freitascodes
-#             git checkout .
-#             git pull origin main -f
-#             rm /home/humildadevps/freitascodes/.env
-#             echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> /home/humildadevps/freitascodes/.env
-#             echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> /home/humildadevps/freitascodes/.env
-#             echo "DEBUG=${{ secrets.DEBUG }}" >> /home/humildadevps/freitascodes/.env
-#             echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/humildadevps/freitascodes/.env
-#             echo "DB_USER=${{ secrets.DB_USER }}" >> /home/humildadevps/freitascodes/.env
-#             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /home/humildadevps/freitascodes/.env
-#             echo "DB_HOST=${{ secrets.DB_HOST }}" >> /home/humildadevps/freitascodes/.env
-#             docker compose up --build -d
-#           EOF
+            rm $VM_PWD/.env
 
-#       - name: Deploy to Google Cloud VM
-#         env:
-#           DB_NAME: ${{ secrets.DB_NAME }}
-#           DB_USER: ${{ secrets.DB_USER }}
-#           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#           DB_HOST: ${{ secrets.DB_HOST }}
-#         run: |
-#           ssh -o StrictHostKeyChecking=no -i /tmp/gcp_ssh_key humildadevps@$GCP_VM_IP << EOF
-#             cd /home/humildadevps/freitascodes
-#             rm -rf venv/
-#             python -m venv venv
-#             source venv/bin/activate
-#             sleep 10
-#             docker ps
-#             pip install -r requirements.txt --no-cache
-#             rm -rf freitascodes/static/*
-#             python manage.py collectstatic --noinput
-#             sudo systemctl restart gunicorn
-#           EOF
+            echo "CONTAINER_BACKEND_NAME=${{ secrets.CONTAINER_BACKEND_NAME }}" >> $VM_PWD/.env
+            echo "CONTAINER_DB_NAME=${{ secrets.CONTAINER_DB_NAME }}" >> $VM_PWD/.env
+            echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $VM_PWD/.env
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $VM_PWD/.env
+            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $VM_PWD/.env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> $VM_PWD/.env
+            echo "DEBUG=${{ secrets.DEBUG }}" >> $VM_PWD/.env
+            echo "VM_IP=${{ secrets.VM_IP }}" >> $VM_PWD/.env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $VM_PWD/.env
 
-#       - name: Clean up SSH key and credentials
-#         run: |
-#           rm -f /tmp/gcp_ssh_key
-#           rm -f /tmp/gcp_key.json
-#         if: always()
+            docker compose up --build -d
+          EOF
 
-#     env:
-#       GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
-#       GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
-#       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
+    env:
+        VM_IP: ${{ secrets.VM_IP }}
+        VM_PWD: ${{ secrets.VM_PWD }}
+        VM_USER: ${{ secrets.VM_USER }}
+        VM_PASSKEY: ${{ secrets.VM_PASSKEY }}
