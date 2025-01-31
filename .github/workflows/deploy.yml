@@ -19,10 +19,10 @@ jobs:
       - name: Set environment variables in app.yaml and .env on VM
         run: |
           sshpass -p "$VM_PASSKEY" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP << 'EOF'
-            cd $VM_PWD
+            cd $VM_USER/Projetos/freitascodes
 
             pwd
-            
+
             git checkout .
             git pull origin main -f
 
