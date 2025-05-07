@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 ALLOWED_HOSTS = ['0.0.0.0',os.getenv('VM_IP'),'portifolio.dinho.dev']
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:1404', 'https://portifolio.dinho.dev']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:1404', 'https://portifolio.dinho.dev', 'https://dinho.dev']
 
 CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS
 
