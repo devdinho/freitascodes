@@ -6,7 +6,7 @@ SITE_ID = 1
 
 load_dotenv(override=True)
 
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG','False') == 'True'
 
 print(f"Debug: {DEBUG}")
 
