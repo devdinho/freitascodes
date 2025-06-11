@@ -14,7 +14,9 @@ class ImagensSerializer(serializers.ModelSerializer):
 
   
   def get_img(self, obj):
-    current_site = Site.objects.get_current()
-    img = current_site.domain + obj.arquivo.url
+    request = self.context.get('request')
+    if request:
+        return request.build_absolute_uri(obj.arquivo.url)
     
-    return img
+    current_site = Site.objects.get_current()
+    return f"https://{current_site.domain}{obj.arquivo.url}"
