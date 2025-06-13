@@ -18,5 +18,5 @@ class ImagensSerializer(serializers.ModelSerializer):
     if request:
         return request.build_absolute_uri(obj.arquivo.url)
     
-    current_site = Site.objects.get_current()
+    current_site = Site.objects.get(pk=1)  # Assumindo que o site com pk igual a 1 é o site atual
     return f"https://{current_site.domain}{obj.arquivo.url}"
